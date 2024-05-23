@@ -1,5 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap");
+
 html {
     margin: 0;
+}
+
+body {
+    font-family: "Reddit Sans", sans-serif;
 }
 
 nav {
@@ -26,4 +32,79 @@ nav {
 main {
     width: 80%;
     margin: auto;
+}
+.home-container {
+    display: flex;
+    margin-top: 3rem;
+}
+
+.placement {
+    width: 45%;
+}
+
+.placement img {
+    width: 100%;
+}
+
+.information input {
+    margin-bottom: 1rem;
+}
+
+.information input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+}
+
+.circle {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+}
+
+.red-circle {
+    background-color: red;
+}
+
+.green-circle {
+    background-color: green;
+}
+
+.orange-circle {
+    background-color: orange;
+}
+
+.yellow-circle {
+    background-color: yellow;
+}
+
+.blue-circle {
+    background-color: blue;
+}
+
+.podium-hoogte {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.inventaris {
+    text-align: right;
+    width: 50%;
+}
+.inventaris h4 {
+    width: 100%;
+}
+.item {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    text-align: right;
+    width: 100%;
+}
+
+.item p {
+    margin: 0.25rem;
 }
