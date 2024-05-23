@@ -1,0 +1,29 @@
+html {
+    margin: 0;
+}
+
+nav {
+    border-bottom: 1px solid #ccc;
+}
+
+.nav-items {
+    display: flex;
+}
+
+.nav-item {
+    list-style-type: none;
+    margin-left: 1rem;
+}
+
+.nav-content {
+    width: 70%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+main {
+    width: 80%;
+    margin: auto;
+}
