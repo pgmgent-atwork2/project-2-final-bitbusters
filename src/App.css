@@ -165,8 +165,7 @@ main {
 
 .active,
 .instrument-card:hover {
-    background-color: #000000;
-    color: white;
+    background-color: #d9d9d93f;
 }
 
 .content {
@@ -177,7 +176,7 @@ main {
 
 .added-div {
     background-color: red;
-    margin: 1rem;
+    margin: 0.25rem;
 }
 
 .display-total {

@@ -8,7 +8,6 @@ const Instruments = () => {
 
     useEffect(() => {
         const titles = document.getElementsByClassName("collapsible-title");
-        let i;
 
         const handleClick = function () {
             var content = this.nextElementSibling;
@@ -19,11 +18,11 @@ const Instruments = () => {
             }
         };
 
-        for (i = 0; i < titles.length; i++) {
+        for (let i = 0; i < titles.length; i++) {
             titles[i].addEventListener("click", handleClick);
         }
         return () => {
-            for (i = 0; i < titles.length; i++) {
+            for (let i = 0; i < titles.length; i++) {
                 titles[i].removeEventListener("click", handleClick);
             }
         };
@@ -61,28 +60,61 @@ const Instruments = () => {
     if (error) return <p>Error: {error.message}</p>;
     if (!data) return <p>No data available</p>;
 
+    const instrumentColors = {
+        strijkers: "#FFC0CB",
+        houtblazers: "#87CEEB",
+        koperblazers: "#FFD700",
+        diverses: "#90EE90",
+    };
+
+    const generateShade = (color, factor) => {
+        const hex = color.slice(1);
+        const num = parseInt(hex, 16);
+        let r = (num >> 16) + factor * 10;
+        let g = ((num >> 8) & 0x00ff) + factor * 10;
+        let b = (num & 0x0000ff) + factor * 10;
+        r = Math.min(255, r);
+        g = Math.min(255, g);
+        b = Math.min(255, b);
+        return (
+            "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+        );
+    };
+
     const renderInstrumentList = (instruments, section) => (
         <div className="instrument-card" key={section}>
             <div className="collapsible-title">{section}</div>
             <ul className="content" style={{ display: "none" }}>
-                {instruments.map(({ id, instrument, amount }) => (
-                    <li key={id}>
-                        {instrument} - {counts[id]} / {amount}
-                        <button onClick={() => handleIncrement(id, amount)}>
-                            +
-                        </button>
-                        <button onClick={() => handleDecrement(id)}>-</button>
-                        <div className="display-total">
-                            {Array.from({ length: counts[id] }).map(
-                                (_, index) => (
-                                    <div key={index} className="added-div">
-                                        Added {index + 1}
-                                    </div>
-                                )
-                            )}
-                        </div>
-                    </li>
-                ))}
+                {instruments.map(({ id, instrument, amount }, index) => {
+                    const shade = generateShade(
+                        instrumentColors[section.toLowerCase()],
+                        index
+                    );
+                    return (
+                        <li key={id}>
+                            {instrument} - {counts[id]} / {amount}
+                            <button onClick={() => handleIncrement(id, amount)}>
+                                +
+                            </button>
+                            <button onClick={() => handleDecrement(id)}>
+                                -
+                            </button>
+                            <div className="display-total">
+                                {Array.from({ length: counts[id] }).map(
+                                    (_, idx) => (
+                                        <div
+                                            key={`${instrument}-${idx}`}
+                                            className="added-div"
+                                            style={{ backgroundColor: shade }}
+                                        >
+                                            Added {idx + 1}
+                                        </div>
+                                    )
+                                )}
+                            </div>
+                        </li>
+                    );
+                })}
             </ul>
         </div>
     );
