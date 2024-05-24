@@ -4,7 +4,7 @@ import Instruments from "../components/Instruments";
 export default function Home() {
     return (
         <div className="home-container">
-            <div className="placement">
+            <div className="left">
                 <div className="information">
                     <input placeholder="Name" />
                     <br></br>
