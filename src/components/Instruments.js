@@ -104,6 +104,7 @@ const Instruments = () => {
                                     (_, idx) => (
                                         <div
                                             key={`${instrument}-${idx}`}
+                                            id={`${instrument}-${idx}`}
                                             className="added-div"
                                             style={{ backgroundColor: shade }}
                                         >
@@ -118,13 +119,45 @@ const Instruments = () => {
             </ul>
         </div>
     );
+    const calculateTotalAmount = (instruments) => {
+        return instruments.reduce((total, item) => total + item.amount, 0);
+    };
 
     return (
         <div className="instrument-list">
+            <div className="category-totals">
+                <p>Strijkers Total: {calculateTotalAmount(data.strijkers)}</p>
+                <p>
+                    Houtblazers Total: {calculateTotalAmount(data.houtblazers)}
+                </p>
+                <p>
+                    Koperblazers Total:{" "}
+                    {calculateTotalAmount(data.koperblazers)}
+                </p>
+                <p>Diverses Total: {calculateTotalAmount(data.diverses)}</p>
+            </div>
             {renderInstrumentList(data.strijkers, "Strijkers")}
             {renderInstrumentList(data.houtblazers, "Houtblazers")}
             {renderInstrumentList(data.koperblazers, "Koperblazers")}
             {renderInstrumentList(data.diverses, "Diverses")}
+            <div className="legende">
+                <h4>Bezettingen</h4>
+                <div className="instruments">
+                    0.0.0.0.0|0.0.0.0|0.0.0.0|0.0.|0.0
+                </div>
+                <div className="podium-hoogte">
+                    <div className="circle red-circle"></div>
+                    <p>100cm</p>
+                    <div className="circle green-circle"></div>
+                    <p>80cm</p>
+                    <div className="circle orange-circle"></div>
+                    <p>60cm</p>
+                    <div className="circle yellow-circle"></div>
+                    <p>40cm</p>
+                    <div className="circle blue-circle"></div>
+                    <p>20cm</p>
+                </div>
+            </div>
         </div>
     );
 };
