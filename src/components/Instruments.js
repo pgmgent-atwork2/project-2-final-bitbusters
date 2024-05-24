@@ -5,22 +5,17 @@ import { GET_ALL_POSTS } from "../graphql/queries";
 const Instruments = () => {
     const { loading, error, data } = useQuery(GET_ALL_POSTS);
 
-    console.log(data);
+    console.log("Loading:", loading);
+    console.log("Error:", error);
+    console.log("Data:", data);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
+    if (!data) return <p>No data available</p>;
+
     return (
         <div>
-            <h2>Diverses</h2>
-            <ul>
-                {data.diverses.map(({ id, instrument, amount }) => (
-                    <li key={id}>
-                        {instrument} - {amount}
-                    </li>
-                ))}
-            </ul>
-
             <h2>Strijkers</h2>
             <ul>
                 {data.strijkers.map(({ id, instrument, amount }) => (
@@ -42,6 +37,14 @@ const Instruments = () => {
             <h2>Koperblazers</h2>
             <ul>
                 {data.koperblazers.map(({ id, instrument, amount }) => (
+                    <li key={id}>
+                        {instrument} - {amount}
+                    </li>
+                ))}
+            </ul>
+            <h2>Diverses</h2>
+            <ul>
+                {data.diverses.map(({ id, instrument, amount }) => (
                     <li key={id}>
                         {instrument} - {amount}
                     </li>
