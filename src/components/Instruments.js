@@ -89,6 +89,27 @@ const Instruments = () => {
         });
     };
 
+    const calculateTotalAmount = (instruments) => {
+        return instruments.reduce((total, item) => total + item.amount, 0);
+    };
+
+    const generateBezettingen = () => {
+        const sections = [
+            "strijkers",
+            "houtblazers",
+            "koperblazers",
+            "diverses",
+        ];
+        return sections
+            .map((section) => {
+                const sectionCounts = data[section].map(
+                    (item) => counts[item.id] || 0
+                );
+                return sectionCounts.join(".");
+            })
+            .join("|");
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
     if (!data) return <p>No data available</p>;
@@ -165,10 +186,6 @@ const Instruments = () => {
         </div>
     );
 
-    const calculateTotalAmount = (instruments) => {
-        return instruments.reduce((total, item) => total + item.amount, 0);
-    };
-
     return (
         <div className="instrument-list">
             <div className="category-totals">
@@ -183,9 +200,7 @@ const Instruments = () => {
             {renderInstrumentList(data.diverses, "Diverses")}
             <div className="legende">
                 <h4>Bezettingen</h4>
-                <div className="instruments">
-                    0.0.0.0.0|0.0.0.0|0.0.0.0|0.0.|0.0
-                </div>
+                <div className="instruments">{generateBezettingen()}</div>
                 <div className="podium-hoogte">
                     <div className="circle red-circle"></div>
                     <p>100cm</p>
