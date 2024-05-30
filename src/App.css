@@ -29,6 +29,19 @@ nav {
     align-items: center;
 }
 
+.logo {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.logo-color {
+    background-color: #6a263b;
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+}
+
 main {
     width: 80%;
     margin: auto;
