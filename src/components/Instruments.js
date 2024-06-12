@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_POSTS } from "../graphql/queries";
 
-const Instruments = ({ setDraggedItem }) => {  // Ontvangt de setDraggedItem prop
+const Instruments = ({ setDraggedItem, setSelectedColor }) => {
     const { loading, error, data } = useQuery(GET_ALL_POSTS);
     const [counts, setCounts] = useState({});
     const [totals, setTotals] = useState({
@@ -89,7 +89,7 @@ const Instruments = ({ setDraggedItem }) => {  // Ontvangt de setDraggedItem pro
         });
     };
 
-    const calculateTotalAmount = (instruments) => {
+    const calculateTotalAmount= (instruments) => {
         return instruments.reduce((total, item) => total + item.amount, 0);
     };
 
@@ -135,12 +135,7 @@ const Instruments = ({ setDraggedItem }) => {  // Ontvangt de setDraggedItem pro
                             {instrument} - {counts[id]} / {amount}
                             <button
                                 onClick={() =>
-                                    handleIncrement
-                                    (
-                                        id,
-                                        amount,
-                                        section.toLowerCase()
-                                    )
+                                    handleIncrement(id, amount, section.toLowerCase())
                                 }
                             >
                                 +
@@ -162,8 +157,9 @@ const Instruments = ({ setDraggedItem }) => {  // Ontvangt de setDraggedItem pro
                                             style={{ backgroundColor: shade }}
                                             draggable="true"
                                             onDragStart={(event) => handleDragStart(event, `${instrument}-${idx}`)}
+                                            onClick={() => setSelectedColor(shade)} // Hier wordt de geselecteerde kleur ingesteld bij klikken op een bolletje
                                         >
-                                             {idx + 1} 
+                                            {idx + 1}
                                         </div>
                                     )
                                 )}
@@ -198,34 +194,38 @@ const Instruments = ({ setDraggedItem }) => {  // Ontvangt de setDraggedItem pro
     return (
         <div className="instrument-list">
             <div className="podium-hoogte">
-                <div className="DifPodHigh">
-                    <div className="circle red-circle"></div>
-                    <p>100cm</p>
-                </div>
-                <div className="DifPodHigh">
-                    <div className="circle green-circle"></div>
-                    <p>80cm</p>
-                </div>
-                <div className="DifPodHigh">
-                    <div className="circle orange-circle"></div>
-                    <p>60cm</p>
-                </div>
-                <div className="DifPodHigh">
-                    <div className="circle yellow-circle"></div>
-                    <p>40cm</p>
-                </div>
-                <div className="DifPodHigh">
-                    <div className="circle blue-circle"></div>
-                    <p>20cm</p>
-                </div>
-            </div>
+    {/* Circles voor podiumhoogte */}
+    <div className="DifPodHigh">
+        <div className="circle red-circle" style={{ backgroundColor: "rgba(255, 0, 0, 0.5)" }} onClick={() => setSelectedColor("#FF0000")}></div>
+        <p>100cm</p>
+    </div>
+    <div className="DifPodHigh">
+        <div className="circle green-circle" style={{ backgroundColor: "rgba(0, 255, 0, 0.5)" }} onClick={() => setSelectedColor("#00FF00")}></div>
+        <p>80cm</p>
+    </div>
+    <div className="DifPodHigh">
+        <div className="circle orange-circle" style={{ backgroundColor: "rgba(255, 165, 0, 0.5)" }} onClick={() => setSelectedColor("#FFA500")}></div>
+        <p>60cm</p>
+    </div>
+    <div className="DifPodHigh">
+        <div className="circle yellow-circle" style={{ backgroundColor: "rgba(255, 255, 0, 0.5)" }} onClick={() => setSelectedColor("#FFFF00")}></div>
+        <p>40cm</p>
+    </div>
+    <div className="DifPodHigh">
+        <div className="circle blue-circle" style={{ backgroundColor: "rgba(0, 0, 255, 0.5)" }} onClick={() => setSelectedColor("#0000FF")}></div>
+        <p>20cm</p>
+    </div>
+</div>
+
             <div className="InstrumentWrapper">
+                {/* Lijsten van instrumenten */}
                 {renderInstrumentList(data.strijkers, "Strijkers")}
                 {renderInstrumentList(data.houtblazers, "Houtblazers")}
                 {renderInstrumentList(data.koperblazers, "Koperblazers")}
                 {renderInstrumentList(data.diverses, "Diverses")}
             </div>
             <div className="category-totals">
+                {/* Totalen per categorie */}
                 <p>Strijkers Total: {totals.strijkers}</p>
                 <p>Houtblazers Total: {totals.houtblazers}</p>
                 <p>Koperblazers Total: {totals.koperblazers}</p>
@@ -240,3 +240,4 @@ const Instruments = ({ setDraggedItem }) => {  // Ontvangt de setDraggedItem pro
 };
 
 export default Instruments;
+
