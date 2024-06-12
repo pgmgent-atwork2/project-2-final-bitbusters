@@ -188,34 +188,47 @@ const Instruments = () => {
 
     return (
         <div className="instrument-list">
+            <div className="podium-hoogte">
+                <div class="DifPodHigh">
+                    <div className="circle red-circle"></div>
+                    <p>100cm</p>
+                </div>
+                <div class="DifPodHigh">
+                    <div className="circle green-circle"></div>
+                    <p>80cm</p>
+                </div>
+                <div class="DifPodHigh">
+                    <div className="circle orange-circle"></div>
+                    <p>60cm</p>
+                </div>
+                <div class="DifPodHigh">
+                    <div className="circle yellow-circle"></div>
+                    <p>40cm</p>
+                </div>
+                <div class="DifPodHigh">
+                    <div className="circle blue-circle"></div>
+                    <p>20cm</p>
+                </div>
+            </div>
+            <div class="InstrumentWrapper">
+                {renderInstrumentList(data.strijkers, "Strijkers")}
+                {renderInstrumentList(data.houtblazers, "Houtblazers")}
+                {renderInstrumentList(data.koperblazers, "Koperblazers")}
+                {renderInstrumentList(data.diverses, "Diverses")}
+            </div>
             <div className="category-totals">
                 <p>Strijkers Total: {totals.strijkers}</p>
                 <p>Houtblazers Total: {totals.houtblazers}</p>
                 <p>Koperblazers Total: {totals.koperblazers}</p>
                 <p>Diverses Total: {totals.diverses}</p>
             </div>
-            {renderInstrumentList(data.strijkers, "Strijkers")}
-            {renderInstrumentList(data.houtblazers, "Houtblazers")}
-            {renderInstrumentList(data.koperblazers, "Koperblazers")}
-            {renderInstrumentList(data.diverses, "Diverses")}
             <div className="legende">
                 <h4>Bezettingen</h4>
                 <div className="instruments">{generateBezettingen()}</div>
-                <div className="podium-hoogte">
-                    <div className="circle red-circle"></div>
-                    <p>100cm</p>
-                    <div className="circle green-circle"></div>
-                    <p>80cm</p>
-                    <div className="circle orange-circle"></div>
-                    <p>60cm</p>
-                    <div className="circle yellow-circle"></div>
-                    <p>40cm</p>
-                    <div className="circle blue-circle"></div>
-                    <p>20cm</p>
-                </div>
             </div>
         </div>
     );
+
 };
 
 export default Instruments;
