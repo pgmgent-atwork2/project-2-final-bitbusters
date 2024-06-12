@@ -191,6 +191,7 @@ main {
 
 .added-div {
     margin: 0.25rem;
+    padding: 0 0.25rem;
 }
 
 .display-total {
@@ -207,6 +208,9 @@ footer {
     display: flex;
     align-items: center;
     gap: 0.25rem;
+}
+.dragover {
+    border: 2px dashed #000; /* Voeg hier je gewenste stijl toe voor het markeren van het grid-item */
 }
 
 @media screen and (max-width: 1300px) {

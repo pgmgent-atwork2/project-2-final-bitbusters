@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_POSTS } from "../graphql/queries";
 
-const Instruments = () => {
+const Instruments = ({ setDraggedItem }) => {  // Ontvangt de setDraggedItem prop
     const { loading, error, data } = useQuery(GET_ALL_POSTS);
     const [counts, setCounts] = useState({});
     const [totals, setTotals] = useState({
@@ -121,20 +121,6 @@ const Instruments = () => {
         diverses: "#90EE90",
     };
 
-    const generateShade = (color, factor) => {
-        const hex = color.slice(1);
-        const num = parseInt(hex, 16);
-        let r = (num >> 16) + factor * 10;
-        let g = ((num >> 8) & 0x00ff) + factor * 10;
-        let b = (num & 0x0000ff) + factor * 10;
-        r = Math.min(255, r);
-        g = Math.min(255, g);
-        b = Math.min(255, b);
-        return (
-            "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
-        );
-    };
-
     const renderInstrumentList = (instruments, section) => (
         <div className="instrument-card" key={section}>
             <div className="collapsible-title">{section}</div>
@@ -149,7 +135,8 @@ const Instruments = () => {
                             {instrument} - {counts[id]} / {amount}
                             <button
                                 onClick={() =>
-                                    handleIncrement(
+                                    handleIncrement
+                                    (
                                         id,
                                         amount,
                                         section.toLowerCase()
@@ -173,8 +160,10 @@ const Instruments = () => {
                                             id={`${instrument}-${idx}`}
                                             className="added-div"
                                             style={{ backgroundColor: shade }}
+                                            draggable="true"
+                                            onDragStart={(event) => handleDragStart(event, `${instrument}-${idx}`)}
                                         >
-                                            Added {idx + 1}
+                                             {idx + 1} 
                                         </div>
                                     )
                                 )}
@@ -186,31 +175,51 @@ const Instruments = () => {
         </div>
     );
 
+    const generateShade = (color, factor) => {
+        const hex = color.slice(1);
+        const num = parseInt(hex, 16);
+        let r = (num >> 16) + factor * 10;
+        let g = ((num >> 8) & 0x00ff) + factor * 10;
+        let b = (num & 0x0000ff) + factor * 10;
+        r = Math.min(255, r);
+        g = Math.min(255, g);
+        b = Math.min(255, b);
+        return (
+            "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+        );
+    };
+
+    const handleDragStart = (event, elementId) => {
+        event.dataTransfer.setData("text/plain", elementId);
+        setDraggedItem(elementId);
+        event.target.style.opacity = '0.5';
+    };
+
     return (
         <div className="instrument-list">
             <div className="podium-hoogte">
-                <div class="DifPodHigh">
+                <div className="DifPodHigh">
                     <div className="circle red-circle"></div>
                     <p>100cm</p>
                 </div>
-                <div class="DifPodHigh">
+                <div className="DifPodHigh">
                     <div className="circle green-circle"></div>
                     <p>80cm</p>
                 </div>
-                <div class="DifPodHigh">
+                <div className="DifPodHigh">
                     <div className="circle orange-circle"></div>
                     <p>60cm</p>
                 </div>
-                <div class="DifPodHigh">
+                <div className="DifPodHigh">
                     <div className="circle yellow-circle"></div>
                     <p>40cm</p>
                 </div>
-                <div class="DifPodHigh">
+                <div className="DifPodHigh">
                     <div className="circle blue-circle"></div>
                     <p>20cm</p>
                 </div>
             </div>
-            <div class="InstrumentWrapper">
+            <div className="InstrumentWrapper">
                 {renderInstrumentList(data.strijkers, "Strijkers")}
                 {renderInstrumentList(data.houtblazers, "Houtblazers")}
                 {renderInstrumentList(data.koperblazers, "Koperblazers")}
@@ -228,7 +237,6 @@ const Instruments = () => {
             </div>
         </div>
     );
-
 };
 
 export default Instruments;
