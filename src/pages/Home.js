@@ -1,9 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Instruments from "../components/Instruments";
+import html2pdf from "html2pdf.js";
 
 export default function Home() {
     const [draggedItem, setDraggedItem] = useState(null);
     const [selectedColor, setSelectedColor] = useState(null);
+    const [name, setName] = useState("");
+    const [date, setDate] = useState("");
+    const [generatedUrl, setGeneratedUrl] = useState("");
+    const [gridColors, setGridColors] = useState([]);
+
+    useEffect(() => {
+        // Parse URL query parameters
+        const params = new URLSearchParams(window.location.search);
+        const nameParam = params.get("name");
+        const dateParam = params.get("date");
+        const colorsParam = params.get("colors");
+
+        if (nameParam) {
+            setName(nameParam);
+        }
+
+        if (dateParam) {
+            setDate(dateParam);
+        }
+        
+        if (colorsParam) {
+            setGridColors(colorsParam.split(","));
+        }
+    }, []);
 
     const handleDragStart = (event) => {
         const id = event.target.id;
@@ -56,13 +81,46 @@ export default function Home() {
         setSelectedColor(color);
     };
 
+    const handleGridItemClick = (index) => {
+        const newGridColors = [...gridColors];
+        newGridColors[index] = selectedColor;
+        setGridColors(newGridColors);
+    };
+
+    const downloadPdf = () => {
+        const element = document.querySelector(".left");
+        html2pdf().from(element).save();
+    };
+
+    const generateUrl = () => {
+        const colorsString = gridColors.join(",");
+        const url = `${window.location.origin}?name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}&colors=${encodeURIComponent(colorsString)}`;
+        setGeneratedUrl(url);
+    };
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(generatedUrl).then(() => {
+            alert('URL copied to clipboard');
+        }, () => {
+            alert('Failed to copy URL');
+        });
+    };
+
     return (
         <div className="home-container">
             <div className="left">
                 <div className="information">
-                    <input placeholder="Name" />
+                    <input 
+                        placeholder="Name" 
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
                     <br />
-                    <input placeholder="Date" />
+                    <input 
+                        placeholder="Date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                    />
                 </div>
                 <div className="gridlock">
                     <div
@@ -82,12 +140,12 @@ export default function Home() {
                                 <div
                                     key={index}
                                     className="grid-item"
-                                    draggable="false"
-                                    onClick={(event) => {
-                                        event.target.style.backgroundColor =
-                                            selectedColor;
-                                        event.target.style.opacity = "0.25";
+                                    style={{
+                                        backgroundColor: gridColors[index] || "transparent",
+                                        opacity: gridColors[index] ? "0.25" : "1"
                                     }}
+                                    draggable="false"
+                                    onClick={() => handleGridItemClick(index)}
                                 ></div>
                             ))}
                         </div>
@@ -99,7 +157,23 @@ export default function Home() {
                     setDraggedItem={setDraggedItem}
                     setSelectedColor={setSelectedColor}
                 />
+                <div className="end">
+            <button onClick={downloadPdf}>Download PDF</button>
+            <button onClick={generateUrl}>Generate URL</button>
+            {generatedUrl && (
+                <div>
+                    <input 
+                        type="text" 
+                        value={generatedUrl} 
+                        readOnly 
+                        style={{ width: "100%" }}
+                    />
+                    <button onClick={copyToClipboard}>Copy URL</button>
+                </div>
+            )}
             </div>
+            </div>
+            
         </div>
     );
 }
